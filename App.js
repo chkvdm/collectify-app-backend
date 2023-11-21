@@ -17,8 +17,8 @@ const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: [
-      'http://localhost:3000',
       'https://collectify-2d8002ccdfaa.herokuapp.com',
+      'http://localhost:3000',
     ],
     methods: ['GET', 'POST'],
   },
