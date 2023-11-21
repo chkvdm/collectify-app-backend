@@ -16,7 +16,8 @@ export default class CollectionService {
     return await Types.findAll();
   }
 
-  async addCollection(userId, name, description, theme, image) {
+  async addCollection(userId, name, theme, description, image) {
+    console.log({ ...{ userId, name, theme, description, image } });
     return await Collections.create({
       userId: userId,
       collectionName: name,
