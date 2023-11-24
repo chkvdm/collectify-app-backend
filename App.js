@@ -4,6 +4,7 @@ import http from 'http';
 import passport from 'passport';
 import cors from 'cors';
 import { Server } from 'socket.io';
+import { Client } from '@elastic/elasticsearch';
 
 import router from './src/routes/router.js';
 import sequelize from './src/config/database.js';
@@ -23,7 +24,16 @@ const io = new Server(httpServer, {
     methods: ['GET', 'POST'],
   },
 });
+
+const client = new Client({
+  node: config.elasticNode,
+  auth: {
+    apiKey: config.elasticApiKey,
+  },
+});
+
 app.set('socketio', io);
+app.set('client', client);
 
 app.use(cors());
 
@@ -44,15 +54,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({ error: err });
 });
-
-// sequelize
-//   .authenticate()
-//   .then(() => {
-//     console.log('MySQL connection successfully.');
-//   })
-//   .catch((err) => {
-//     console.log('Unable to connect to the database:', err);
-//   });
 
 io.on('connection', (socket) => {
   socket.on('disconnect', () => {});

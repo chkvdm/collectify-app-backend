@@ -6,6 +6,9 @@ import { Likes } from '../models/likes.model.js';
 import { Comments } from '../models/comments.model.js';
 import { Themes } from '../models/themes.model.js';
 import { Types } from '../models/types.model.js';
+import { Sequelize } from 'sequelize';
+
+import sequelize from '../config/database.js';
 
 export default class CollectionService {
   async allThemes() {
@@ -55,6 +58,27 @@ export default class CollectionService {
         model: OptionalFieldValue,
         attributes: ['fieldName', 'value'],
       },
+    });
+  }
+
+  async findTags() {
+    return await Items.findAll({
+      attributes: ['tags'],
+      order: [['createdAt', 'DESC']],
+      limit: 10000,
+    });
+  }
+
+  async findLargest() {
+    const query = `
+    SELECT \`collection_id\`, COUNT(*) AS count
+    FROM \`items\`
+    GROUP BY \`collection_id\`
+    ORDER BY count DESC
+    LIMIT 5;
+  `;
+    return await sequelize.query(query, {
+      type: Sequelize.QueryTypes.SELECT,
     });
   }
 

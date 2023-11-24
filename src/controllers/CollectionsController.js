@@ -48,6 +48,24 @@ export default class CollectionsController {
           optionalFields
         );
       }
+
+      /////////// elastic start ////////////
+      const client = req.app.get('client');
+
+      await client.index({
+        index: 'search-collections',
+        id: newCollection.id,
+        body: {
+          id: newCollection.id,
+          user: newCollection.userId,
+          name: newCollection.collectionName,
+          theme: newCollection.theme,
+          description: newCollection.description,
+        },
+      });
+
+      /////////// elastic end //////////////
+
       return res.status(201).end();
     } catch (err) {
       next(err);
@@ -69,6 +87,15 @@ export default class CollectionsController {
       const collectionId = req.params.collectionId;
       const collection = await collectionService.findColection(collectionId);
       return res.status(200).json({ collection: collection });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getLargestCollections(req, res, next) {
+    try {
+      const largestCollections = await collectionService.findLargest();
+      return res.status(200).json({ largestCollections });
     } catch (err) {
       next(err);
     }
@@ -98,7 +125,7 @@ export default class CollectionsController {
 
   async createItem(req, res, next) {
     try {
-      const { item } = req.body;
+      const { userId, item } = req.body;
       const collectionId = req.params.collectionId;
       const { id, itemName, tags, ...optField } = item;
       const itemProp = {
@@ -112,7 +139,36 @@ export default class CollectionsController {
           await collectionService.addOptField(newItem.id, key, val);
         }
       }
+
+      /////////// elastic start ////////////
+
+      const client = req.app.get('client');
+
+      await client.index({
+        index: 'search-items',
+        id: newItem.id,
+        body: {
+          id: newItem.id,
+          user: userId,
+          collection: newItem.collectionId,
+          name: newItem.itemName,
+          tags: newItem.tags,
+          optField: optField,
+        },
+      });
+
+      /////////// elastic end ////////////
+
       return res.status(201).end();
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getAllTags(req, res, next) {
+    try {
+      const tags = await collectionService.findTags();
+      return res.status(200).json({ tags });
     } catch (err) {
       next(err);
     }

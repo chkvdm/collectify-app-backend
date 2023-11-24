@@ -28,6 +28,10 @@ router.get('/get-item-data/:itemId', collectionsController.getItemData);
 
 router.get('/last-items', collectionsController.getLastItems);
 
+router.get('/tags', collectionsController.getAllTags);
+
+router.get('/largest', collectionsController.getLargestCollections);
+
 router.post(
   '/:userId/create-collection',
   passport.authenticate('jwt', { session: false }),

@@ -12,6 +12,8 @@ const config = {
   cloudNname: process.env.CLOUD_NAME,
   apiKey: process.env.API_KEY,
   apiSecret: process.env.API_SECRET,
+  elasticNode: process.env.ELASTIC_NODE,
+  elasticApiKey: process.env.ELASTIC_API_KEY,
 };
 
 export default config;

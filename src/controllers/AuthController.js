@@ -8,7 +8,19 @@ export default class AuthController {
       const { email, password, name } = req.body;
       const hashPassword = await authService.hashPassword(password);
       try {
-        await authService.addNewUser(email, hashPassword, name);
+        const newUser = await authService.addNewUser(email, hashPassword, name);
+
+        // /////////// elastic start ////////////
+        // const client = req.app.get('client');
+
+        // await client.index({
+        //   index: 'users',
+        //   id: newUser.id,
+        //   body: { id: newUser.id, name: newUser.name },
+        // });
+
+        // /////////// elastic end //////////////
+
         return res.status(201).end();
       } catch (err) {
         if (err.name === 'SequelizeUniqueConstraintError') {
