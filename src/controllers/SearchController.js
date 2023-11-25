@@ -36,7 +36,8 @@ export default class SearchController {
           },
         },
       });
-      return res.status(200).json({ results });
+      const resultsHits = results.hits.hits;
+      return res.status(200).json({ resultsHits });
     } catch (err) {
       next(err);
     }

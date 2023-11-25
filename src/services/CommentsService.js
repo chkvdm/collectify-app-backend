@@ -3,7 +3,10 @@ import { Users } from '../models/users.model.js';
 
 export default class CollectionService {
   async findComments(itemId) {
-    return await Comments.findAll({ where: { itemId } });
+    return await Comments.findAll({
+      where: { itemId },
+      order: [['createdAt', 'DESC']],
+    });
   }
 
   async addComment(itemId, fromUser, text) {

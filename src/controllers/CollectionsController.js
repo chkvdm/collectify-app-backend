@@ -49,9 +49,7 @@ export default class CollectionsController {
         );
       }
 
-      /////////// elastic start ////////////
       const client = req.app.get('client');
-
       await client.index({
         index: 'search-collections',
         id: newCollection.id,
@@ -63,9 +61,6 @@ export default class CollectionsController {
           description: newCollection.description,
         },
       });
-
-      /////////// elastic end //////////////
-
       return res.status(201).end();
     } catch (err) {
       next(err);
@@ -139,11 +134,7 @@ export default class CollectionsController {
           await collectionService.addOptField(newItem.id, key, val);
         }
       }
-
-      /////////// elastic start ////////////
-
       const client = req.app.get('client');
-
       await client.index({
         index: 'search-items',
         id: newItem.id,
@@ -156,9 +147,6 @@ export default class CollectionsController {
           optField: optField,
         },
       });
-
-      /////////// elastic end ////////////
-
       return res.status(201).end();
     } catch (err) {
       next(err);
@@ -189,6 +177,19 @@ export default class CollectionsController {
           await collectionService.updateOptField(itemProp.id, key, val);
         }
       }
+      const client = req.app.get('client');
+      client.update({
+        index: 'search-items',
+        id: id,
+        body: {
+          doc: {
+            id: id,
+            name: itemName,
+            tags: tags,
+            optField: optField,
+          },
+        },
+      });
       return res.status(200).end();
     } catch (err) {
       next(err);

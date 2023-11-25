@@ -40,7 +40,10 @@ export default class CollectionService {
   }
 
   async findColections(userId) {
-    return await Collections.findAll({ where: { userId } });
+    return await Collections.findAll({
+      where: { userId },
+      order: [['createdAt', 'DESC']],
+    });
   }
 
   async findColection(collectionId) {
@@ -54,6 +57,7 @@ export default class CollectionService {
   async findAllItems(collectionId) {
     return await Items.findAll({
       where: { collectionId },
+      order: [['createdAt', 'DESC']],
       include: {
         model: OptionalFieldValue,
         attributes: ['fieldName', 'value'],

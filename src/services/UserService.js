@@ -2,7 +2,7 @@ import { Users } from '../models/users.model.js';
 
 export default class UsersService {
   async allUsers() {
-    return await Users.findAll();
+    return await Users.findAll({ order: [['createdAt', 'DESC']] });
   }
 
   async updateUsers(user) {

@@ -28,10 +28,7 @@ export default class AuthController {
       const io = req.app.get('socketio');
       io.emit('comment', { comments: formattedComments });
 
-      /////////// elastic start ////////////
-
       const client = req.app.get('client');
-
       await client.index({
         index: 'search-comments',
         id: newComment.id,
@@ -42,9 +39,6 @@ export default class AuthController {
           text: newComment.text,
         },
       });
-
-      /////////// elastic end ////////////
-
       return res.status(201).json({ comments: formattedComments });
     } catch (err) {
       next(err);

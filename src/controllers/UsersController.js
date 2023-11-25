@@ -35,6 +35,17 @@ export default class UsersController {
     try {
       const { id } = req.body;
       await usersService.deleteUserById(id);
+      const client = req.app.get('client');
+      await client.deleteByQuery({
+        index: '_all',
+        body: {
+          query: {
+            query_string: {
+              query: id,
+            },
+          },
+        },
+      });
       return res.status(204).end();
     } catch (err) {
       next(err);
