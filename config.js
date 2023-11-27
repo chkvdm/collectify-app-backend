@@ -7,6 +7,7 @@ const config = {
   dbUser: process.env.MYSQL_USER,
   dbPassword: process.env.MYSQL_PASSWORD,
   dbHost: process.env.HOST,
+  dbPort: process.env.DB_PORT,
   dialect: process.env.DIALECT,
   port: process.env.PORT,
   cloudNname: process.env.CLOUD_NAME,
