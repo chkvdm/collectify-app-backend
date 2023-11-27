@@ -185,7 +185,7 @@ export default class CollectionsController {
           doc: {
             id: id,
             name: itemName,
-            tags: tags,
+            tags: tags.split(' '),
             optField: optField,
           },
         },
